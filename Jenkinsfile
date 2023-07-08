@@ -71,7 +71,7 @@ pipeline {
             //     branch 'master'
             // }
             steps {
-                sh './automation/'
+                sh './automation/notification.sh'
             }
         }
     }
