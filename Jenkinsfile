@@ -32,9 +32,10 @@ pipeline {
             } // end parallel
         }
 
-        stage('Build') {
+        stage('Build-Docker-ECR') {
             steps {
-                echo "build"
+               sh './automation/docker_build.sh'
+               sh './automation/docker_push.sh'
             }
         }
 
