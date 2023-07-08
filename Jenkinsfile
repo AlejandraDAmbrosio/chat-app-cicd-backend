@@ -32,6 +32,52 @@ pipeline {
             } // end parallel
         }
 
+        stage('sast') {
+            parallel {
+                stage('secrets') {
+                    steps {
+                        sh './automation/security.sh horusec'
+                        stash name: 'report_horusec.json', includes: 'report_horusec.json'
+                        }
+                    }
+                stage('Semgrep') {
+                    agent{
+                        docker{
+                            image 'returntocorp/semgrep'
+                            args '-u root:root'                    
+                        }
+                    }
+                    steps {
+                         sh '''
+                        cat << 'EOF' | bash
+                            semgrep ci --config=auto --json --output=report_semgrep.json --max-target-bytes=2MB
+                            EXIT_CODE=$?
+                            if [ "$EXIT_CODE" = "0" ] || [ "$EXIT_CODE" = "1" ]
+                            then
+                                exit 0
+                            else
+                                exit $EXIT_CODE
+                            fi
+                        EOF
+                         '''
+                         stash name: 'report_semgrep.json', includes: 'report_semgrep.json'
+                    }
+                }
+            stage('audit') {
+                agent {
+                    docker {
+                        image 'node:18-alpine'
+                        args '-u root:root'
+                    }           
+                 }
+                    steps {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                            sh 'npm audit --registry=https://registry.npmjs.org -audit-level=critical --json > report_npmaudit.json'
+                            stash name: 'report_npmaudit.json', includes: 'report_npmaudit.json'
+                        } 
+                    }
+                }
+        }
         stage('Build') {
             parallel {
             stage('update-compose') {
