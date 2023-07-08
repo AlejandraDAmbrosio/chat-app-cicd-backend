@@ -6,8 +6,6 @@ source ./automation/docker_getenv.sh
 TELEGRAM_CHAT_ID="-1001508340482"
 PARSE_MODE="Markdown"
 COMMIT=$(git log -1 --pretty=format:"%s")
-BOT_URL_2="https://api.telegram.org/bot5881753165:AAEjB95ZRDUW0kRMCzMA7C1yjpHemiGTpiM/sendMessage"
-
 
 
 # Send message function
