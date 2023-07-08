@@ -34,8 +34,10 @@ pipeline {
 
         stage('Build-Docker-ECR') {
             steps {
-               sh './automation/docker_build.sh'
-               sh './automation/docker_push.sh'
+                withAWS(credentials: 'aws-roxsross', region: "${TARGET_REGION}" ) {
+                   sh './automation/docker_build.sh'
+                   sh './automation/docker_push.sh'  
+                }     
             }
         }
 
