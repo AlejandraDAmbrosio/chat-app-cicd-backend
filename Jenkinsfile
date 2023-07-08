@@ -32,18 +32,33 @@ pipeline {
             } // end parallel
         }
 
-        stage('Build-Docker-ECR') {
-            steps {
-                withAWS(credentials: 'aws-roxsross', region: "${TARGET_REGION}" ) {
-                   sh './automation/docker_build.sh'
-                   sh './automation/docker_push.sh'  
-                }     
+        stage('Build') {
+            parallel {
+            stage('update-compose') {
+                steps {
+                    sh './automation/aws_beanstalk.sh compose'  
+                    }
+                }
+            stage('Build-Docker-ECR') {
+                steps {
+                    withAWS(credentials: 'aws-roxsross', region: "${TARGET_REGION}" ) {
+                    sh './automation/docker_build.sh'
+                    sh './automation/docker_push.sh'  
+                        }     
+                     }
+                }
             }
         }
 
-        stage('Deploy') {
+        stage('Check-AWS-Beanstalk') {
             steps {
-                echo "Deploy"
+                sh './automation/aws_beanstalk.sh check'
+            }
+        }
+
+        stage('Deploy-AWS-Beanstalk') {
+            steps {
+                sh './automation/aws_beanstalk.sh deploy'
             }
         }
         
