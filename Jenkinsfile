@@ -78,6 +78,7 @@ pipeline {
                     }
                 }
         }
+    }
         stage('Build') {
             parallel {
             stage('update-compose') {
