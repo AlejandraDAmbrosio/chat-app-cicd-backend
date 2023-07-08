@@ -67,8 +67,11 @@ pipeline {
         }
         
         stage('Notifications') {
+            // when {
+            //     branch 'master'
+            // }
             steps {
-                echo "notify"
+                sh './automation/'
             }
         }
     }
