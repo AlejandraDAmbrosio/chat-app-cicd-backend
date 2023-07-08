@@ -52,13 +52,17 @@ pipeline {
 
         stage('Check-AWS-Beanstalk') {
             steps {
+                withAWS(credentials: 'aws-roxsross', region: "${TARGET_REGION}" ) {
                 sh './automation/aws_beanstalk.sh check'
+                }
             }
         }
 
         stage('Deploy-AWS-Beanstalk') {
             steps {
+                withAWS(credentials: 'aws-roxsross', region: "${TARGET_REGION}" ) {
                 sh './automation/aws_beanstalk.sh deploy'
+                }
             }
         }
         
