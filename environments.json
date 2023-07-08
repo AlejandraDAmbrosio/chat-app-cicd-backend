@@ -1,0 +1,20 @@
+{
+    "environments":{
+        "master":{
+            "TARGET_AWS_ACCOUNT":"459137896070",
+            "eb_environmentid" : "e-uz7ygngamd",
+            "eb_environmentname" : "chat-app-backend-master",
+            "eb_applicationname" :"chat-app-backend",
+            "s3bucketname" : "backend-devops-deploy",
+            "s3key" : "prod"
+        },
+        "develop":{
+            "TARGET_AWS_ACCOUNT":"459137896070",
+            "eb_environmentid" : "e-2qypzpu4sv",
+            "eb_environmentname" : "chat-app-backend-develop",
+            "eb_applicationname" :"chat-app-backend",
+            "s3bucketname" : "backend-devops-deploy",
+            "s3key" : "dev"
+        }
+    }
+}
